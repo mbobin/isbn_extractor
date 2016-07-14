@@ -1,4 +1,4 @@
-module ISBN
+module ISBNExtractor
   class Reader
     class << self
       def readers
@@ -36,14 +36,11 @@ module ISBN
       @regexps ||= Regexp.union(REGEXPS)
     end
 
-    def parse_match_data data
-      puts data
-      data.compact
-        .map(&:captures)
-        .flatten.compact
-        .map(&:strip)
-    rescue => e
-      []
+    def parse_match data
+      return [] unless match = data.scrub.match(regexps)
+
+      match.captures.compact
+      .select { |string| ISBNCheck.valid? string.gsub!(/\W/, '') }
     end
   end
 end

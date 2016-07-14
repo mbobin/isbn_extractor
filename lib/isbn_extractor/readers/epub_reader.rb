@@ -1,7 +1,7 @@
-module ISBN
+module ISBNExtractor
   class EpubReader < Reader
     def initialize path
-      @reader = EPUB::Parser.parse(path) rescue NullReader.new
+      @reader = EPUB::Parser.parse(path)
     end
 
     def extract_isbns
@@ -24,12 +24,10 @@ module ISBN
     def extract_from_content
       isbns = []
       @reader.each_content do |content|
-        if match = content.read.scrub.match(regexps)
-          isbns << match
-          break
-        end
+        isbns.concat parse_match(content.read)
+        break unless isbns.empty?
       end
-      parse_match_data isbns
+      isbns
     end
   end
 end

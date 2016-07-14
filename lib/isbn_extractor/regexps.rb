@@ -1,6 +1,6 @@
-module ISBN
+module ISBNExtractor
   REGEXPS = [
-    /\bISBN\W?\s?([\d\-\sxX]{10,15})\b/,
+    /\bISBN\W?\s?([\d\-\sxX]{10,20})\b/,
     /\bISBN\W?\s?([\d\-\s]{13,20})\b/,
     /\bISBN-10\s?([\d\-\s]{10,15})\b/,
     /\bISBN-13\W?\s?([\d\-\s]{13,20})\b/,

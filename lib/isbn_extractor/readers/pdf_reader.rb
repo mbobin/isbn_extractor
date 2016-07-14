@@ -1,7 +1,7 @@
-module ISBN
+module ISBNExtractor
   class PdfReader < Reader
     def initialize path
-      @reader = PDF::Reader.new(path) rescue NullReader.new
+      @reader = PDF::Reader.new(path)
     end
 
     def extract_isbns
@@ -14,7 +14,7 @@ module ISBN
     protected
 
     def extract_isbn pages
-      parse_match_data pages.collect { |page| page.text.match(regexps) }
+      pages.collect { |page| (parse_match(page.text) rescue []) }.flatten
     end
   end
 end
