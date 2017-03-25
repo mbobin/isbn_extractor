@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ISBNExtractor
   class Reader
     class << self
@@ -5,8 +7,8 @@ module ISBNExtractor
         @readers ||= Hash.new(NullReader)
       end
 
-      def inherited subclass
-        raise UnknownReaderError unless subclass.name.end_with?('Reader')
+      def inherited(subclass)
+        raise UnknownReaderError unless subclass.name.end_with?("Reader")
 
         readers[subclass.reader_key] = subclass
       end
@@ -16,9 +18,9 @@ module ISBNExtractor
       end
     end
 
-    def initialize book
+    def initialize(book)
       @book_path = book
-      ext = @book_path.split(?.).last.to_sym
+      ext = @book_path.split(".").last.to_sym
       @reader = self.class.readers[ext].new(@book_path)
     end
 
@@ -36,11 +38,14 @@ module ISBNExtractor
       @regexps ||= Regexp.union(REGEXPS)
     end
 
-    def parse_match data
-      return [] unless match = data.scrub.match(regexps)
+    def parse_match(data)
+      match = data.scrub.match(regexps)
+      return [] unless match
 
-      match.captures.compact
-      .select { |string| ISBNCheck.valid? string.gsub!(/\W/, '') }
+      match
+        .captures
+        .compact
+        .select { |string| ISBNCheck.valid? string.gsub!(/\W/, "") }
     end
   end
 end

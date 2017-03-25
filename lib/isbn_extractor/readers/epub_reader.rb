@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module ISBNExtractor
   class EpubReader < Reader
-    def initialize path
+    def initialize(path)
       @reader = EPUB::Parser.parse(path)
     end
 
@@ -31,5 +33,3 @@ module ISBNExtractor
     end
   end
 end
-
-

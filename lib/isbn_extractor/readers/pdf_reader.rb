@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module ISBNExtractor
   class PdfReader < Reader
-    def initialize path
+    def initialize(path)
       @reader = PDF::Reader.new(path)
     end
 
@@ -13,8 +15,8 @@ module ISBNExtractor
 
     protected
 
-    def extract_isbn pages
-      pages.collect { |page| (parse_match(page.text) rescue []) }.flatten
+    def extract_isbn(pages)
+      pages.collect { |page| parse_match(page.text) }.flatten
     end
   end
 end

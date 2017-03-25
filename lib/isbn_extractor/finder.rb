@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module ISBNExtractor
   class Finder
-    def initialize directory:, output: nil
-      @directory, @output = directory, output
+    def initialize(directory:, output: nil)
+      @directory = directory
+      @output = output
     end
 
     def parse
@@ -12,7 +15,7 @@ module ISBNExtractor
 
     protected
 
-    def concurrent path
+    def concurrent(path)
       Concurrent::Future.execute do
         reader = Reader.new(path)
         { book: { path: path, isbn: reader.isbn } }
@@ -20,18 +23,19 @@ module ISBNExtractor
     end
 
     def pattern
-      Pathname(@directory).join('**','**', '*.{pdf,epub}')
+      return @directory if @directory.end_with?(".pdf", ".epub")
+      Pathname(@directory).join("**", "**", "*.{pdf,epub}")
     end
 
     def parse_result
       @parse_result ||= Dir.glob(pattern)
-        .map(&method(:concurrent))
-        .map(&:value).compact
+                           .map(&method(:concurrent))
+                           .map(&:value).compact
     end
 
     def write_to_output
       return unless @output
-      File.open(@output, 'w+'){ |f| f.write parse_result }
+      File.open(@output, "w+") { |f| f.write parse_result }
     end
   end
 end

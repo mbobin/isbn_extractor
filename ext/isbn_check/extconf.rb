@@ -1,5 +1,7 @@
-require 'mkmf'
+# frozen_string_literal: true
 
-abort "missing strlen()"  unless have_func "strlen"
+require "mkmf"
+
+abort "missing strlen()" unless have_func "strlen"
 
 create_makefile "isbn_check/isbn_check"
