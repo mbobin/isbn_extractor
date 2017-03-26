@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*", "Rakefile"]
   s.extensions = %w[ext/isbn_check/extconf.rb]
 
-  s.add_dependency "pdf-reader", "~> 1.4"
+  s.add_dependency "pdf-reader", "~> 2.0"
   s.add_dependency "epub-parser", "~> 0.2", ">= 0.2.6"
   s.add_dependency "concurrent-ruby", "~> 1.0", ">= 1.0.2"
 

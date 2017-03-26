@@ -1,15 +1,9 @@
 # frozen_string_literal: true
 
 module ISBNExtractor
-  class NullReader
-    def initialize(*args); end
-
-    def pages
-      []
-    end
-
-    def extract_isbns
-      []
+  module Readers
+    class NullReader < Base
+      def initialize(*args); end
     end
   end
 end
