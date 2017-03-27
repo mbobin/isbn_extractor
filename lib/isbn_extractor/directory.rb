@@ -69,7 +69,7 @@ module ISBNExtractor
     end
 
     def file_types
-      engine_module.extensions.join(',')
+      engine_module.extensions.join(",")
     end
 
     def gather_data
