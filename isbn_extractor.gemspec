@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "pdf-reader", "~> 2.0"
   s.add_dependency "epub-parser", "~> 0.2", ">= 0.2.6"
+  s.add_dependency "henkei", "~> 1.14", ">= 1.14.3"
   s.add_dependency "concurrent-ruby", "~> 1.0", ">= 1.0.2"
 
   s.add_development_dependency "minitest", "~> 5.9"

@@ -15,18 +15,61 @@ module ISBNExtractor
 
     protected
 
+    module PureRubyDirectory
+      module_function
+
+      def isbn(path)
+        FileReader.new(path).isbn
+      end
+
+      def extensions
+        %w[pdf epub]
+      end
+    end
+
+    module TikaDirectory
+      module_function
+
+      def isbn(path)
+        data = File.read(path)
+        text = Henkei.read(:text, data)
+        Readers::StringReader.new(text).isbn
+      end
+
+      def extensions
+        %w[pdf epub doc docx rtf]
+      end
+    end
+
+    def engine_module
+      @engine_module ||= if ISBNExtractor.engine == :tika
+        TikaDirectory
+      else
+        PureRubyDirectory
+      end
+    end
+
     def concurrent(path)
       Concurrent::Future.execute do
-        { path: path, isbn: FileReader.new(path).isbn }
+        { path: path, isbn: engine_module.isbn(path) }
       end
     end
 
     def pattern
-      if @path.end_with?(".pdf", ".epub")
-        @path
-      else
-        Pathname(@path).join("**", "*.{pdf,epub}")
-      end
+      Pathname(@path.gsub(file_regexp, ""))
+        .join("**", "*.{#{file_types}}")
+    end
+
+    def file_regexp
+      engine_module
+        .extensions
+        .map { |ext| "\.#{ext}" }
+        .join("|")
+        .concat('\z')
+    end
+
+    def file_types
+      engine_module.extensions.join(',')
     end
 
     def gather_data

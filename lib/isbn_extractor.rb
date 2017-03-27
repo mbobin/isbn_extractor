@@ -5,6 +5,7 @@ require "pathname"
 require "pdf-reader"
 require "epub/parser"
 require "concurrent"
+require "henkei"
 require_relative "isbn_extractor/regexps"
 require_relative "isbn_extractor/errors"
 require_relative "isbn_extractor/isbn_check"
@@ -17,7 +18,11 @@ require_relative "isbn_extractor/file_reader"
 require_relative "isbn_extractor/directory"
 
 module ISBNExtractor
+  DEFAULT_ENGINE = :pure_ruby
+
   class << self
+    attr_accessor :engine
+
     def process_directory(directory, output_path = nil)
       Directory.new(path: directory, output_path: output_path).call
     end
@@ -26,4 +31,6 @@ module ISBNExtractor
       Readers::StringReader.new(data).isbn
     end
   end
+
+  self.engine = DEFAULT_ENGINE
 end
