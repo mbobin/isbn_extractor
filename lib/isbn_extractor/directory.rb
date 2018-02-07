@@ -19,6 +19,9 @@ module ISBNExtractor
       module_function
 
       def isbn(path)
+        common = MIME::Types.of(path).map(&:preferred_extension) & extensions
+        return unless common.any?
+
         FileReader.new(path).isbn
       end
 
@@ -31,6 +34,9 @@ module ISBNExtractor
       module_function
 
       def isbn(path)
+        common = MIME::Types.of(path).map(&:preferred_extension) & extensions
+        return unless common.any?
+
         data = File.read(path)
         text = Henkei.read(:text, data)
         Readers::StringReader.new(text).isbn
