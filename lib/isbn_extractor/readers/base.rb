@@ -24,7 +24,9 @@ module ISBNExtractor
         match
           .captures
           .compact
-          .select { |string| ISBNCheck.valid? string.gsub!(/\W/, "") }
+          .map { |string| string.gsub(/\W/, "") }
+          .reject { |string| string.empty? }
+          .select { |string| ISBNCheck.valid? string }
       end
     end
   end
